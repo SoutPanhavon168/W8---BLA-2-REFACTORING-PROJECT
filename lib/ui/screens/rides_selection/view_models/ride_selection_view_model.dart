@@ -3,7 +3,7 @@ import 'package:blabla/model/ride/ride.dart';
 import 'package:blabla/ui/states/ride_preference_state.dart';
 
 class RideSelectionViewModel {
-  final RidePreferenceState state;
+  final RidePreferenceState1 state;
   final RideRepository repository;
 
   List<Ride> rides = [];
@@ -13,7 +13,7 @@ class RideSelectionViewModel {
   Future<void> loadRides() async {
     final allRides = await repository.getAllRides();
 
-    final pref = state.current;
+    final pref = state.selected;
     if (pref == null) return;
 
     rides = allRides.where((ride) {

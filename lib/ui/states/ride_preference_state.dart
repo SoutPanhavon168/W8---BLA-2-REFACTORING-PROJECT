@@ -2,39 +2,41 @@ import 'package:blabla/data/repositories/ride_preference/ride_preference_reposit
 import 'package:blabla/model/ride_pref/ride_pref.dart';
 import 'package:flutter/material.dart';
 
-class RidePreferenceState extends ChangeNotifier {
-  final RidePreferenceRepository repository;
+class RidePreferenceState1 extends ChangeNotifier {
+  final RidePreferenceRepository repo;
 
-  static const int maxAllowedSeats = 8;
+  static const int maxSeatsAllowed = 8;
 
-  RidePreference? _current;
-  List<RidePreference> _history = [];
+  RidePreference? _selected;
+  List<RidePreference> _items = [];
 
-  RidePreferenceState(this.repository) {
-    _init();
+  RidePreferenceState1(this.repo) {
+    _load();
   }
 
-  Future<void> _init() async {
-    await loadHistory();
-    if (_current == null && _history.isNotEmpty) {
-      _current = _history.last;
-      notifyListeners();
+  RidePreference? get selected => _selected;
+  List<RidePreference> get items => _items;
+
+  Future<void> _load() async {
+    _items = await repo.getHistory();
+
+    if (_items.isNotEmpty) {
+      _selected = _items.last;
     }
-  }
 
-  RidePreference? get current => _current;
-  List<RidePreference> get history => _history;
-
-  Future<void> loadHistory() async {
-    _history = await repository.getHistory();
     notifyListeners();
   }
 
-  void selectPreference(RidePreference newPref) {
-    if (_current != newPref) {
-      _current = newPref;
-      _history.add(newPref);
-      notifyListeners();
-    }
+  Future<void> fetchItems() async {
+    _items = await repo.getHistory();
+    notifyListeners();
+  }
+
+  void setSelected(RidePreference pref) {
+    if (_selected == pref) return;
+
+    _selected = pref;
+    _items.add(pref);
+    notifyListeners();
   }
 }

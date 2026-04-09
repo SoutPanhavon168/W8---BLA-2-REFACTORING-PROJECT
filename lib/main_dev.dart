@@ -20,7 +20,7 @@ void main() {
         ),
         ChangeNotifierProvider(
           create: (context) =>
-              RidePreferenceState(context.read<RidePreferenceRepository>()),
+              RidePreferenceState1(context.read<RidePreferenceRepository>()),
         ),
       ],
       child: const BlaBlaApp(),
