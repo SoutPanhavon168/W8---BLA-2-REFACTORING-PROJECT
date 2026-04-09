@@ -11,7 +11,7 @@ class RideSelectionViewModel {
   RideSelectionViewModel(this.state, this.repository);
 
   Future<void> loadRides() async {
-    final allRides = await repository.getRides();
+    final allRides = await repository.getAllRides();
 
     final pref = state.current;
     if (pref == null) return;

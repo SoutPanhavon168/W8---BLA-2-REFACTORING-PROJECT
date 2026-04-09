@@ -3,7 +3,7 @@ import 'package:blabla/services/ride_prefs_service.dart';
 import 'package:flutter/material.dart';
 import '../../../utils/animations_util.dart';
 import '../../theme/theme.dart';
-import '../../widgets/pickers/bla_ride_preference_picker.dart';
+import '../../widgets/pickers/ride_preference/bla_ride_preference_picker.dart';
 import '../rides_selection/rides_selection_screen.dart';
 import 'widgets/home_history_tile.dart';
 

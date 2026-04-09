@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../theme/theme.dart';
-import '../buttons/bla_circle_button.dart';
-import '../buttons/bla_icon_button.dart';
+import '../../../theme/theme.dart';
+import '../../buttons/bla_circle_button.dart';
+import '../../buttons/bla_icon_button.dart';
 
 class BlaSeatPicker extends StatefulWidget {
   const BlaSeatPicker({super.key, this.initSeats, required this.maxSeat});
@@ -15,35 +15,38 @@ class BlaSeatPicker extends StatefulWidget {
 }
 
 class _BlaSeatPickerState extends State<BlaSeatPicker> {
-  late int selectedSeat;
-
-  void onSubmit() {
-    Navigator.pop<int>(context, selectedSeat);
-  }
-
-  void onBackTap() {
-    Navigator.pop(context);
-  }
-
-  void onMinus() {
-    if (selectedSeat >1) {
-      setState(() => selectedSeat--);
-    }
-  }
-
-  void onPlus() {
-    if (selectedSeat < widget.maxSeat) {
-      setState(() => selectedSeat++);
-    }
-  }
-
-  bool get minusDisabled => selectedSeat == 1;
-  bool get plusDisabled => selectedSeat >= widget.maxSeat;
+  int selectedSeat = 1;
 
   @override
   void initState() {
     super.initState();
-    selectedSeat = widget.initSeats ?? 1;
+    if (widget.initSeats != null) {
+      selectedSeat = widget.initSeats!;
+    }
+  }
+
+  void increaseSeat() {
+    if (selectedSeat < widget.maxSeat) {
+      setState(() {
+        selectedSeat = selectedSeat + 1;
+      });
+    }
+  }
+
+  void decreaseSeat() {
+    if (selectedSeat > 1) {
+      setState(() {
+        selectedSeat = selectedSeat - 1;
+      });
+    }
+  }
+
+  void goBack() {
+    Navigator.pop(context);
+  }
+
+  void submit() {
+    Navigator.pop(context, selectedSeat);
   }
 
   @override
@@ -54,8 +57,9 @@ class _BlaSeatPickerState extends State<BlaSeatPicker> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Back icon
-            BlaIconButton(onPressed: onBackTap, icon: Icons.close),
+            // Back button
+            BlaIconButton(onPressed: goBack, icon: Icons.close),
+
             SizedBox(height: BlaSpacings.m),
 
             // Title
@@ -64,16 +68,17 @@ class _BlaSeatPickerState extends State<BlaSeatPicker> {
               style: BlaTextStyles.title.copyWith(color: BlaColors.textNormal),
             ),
 
-            // Form
+            // Seat controls
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 BlaCircleButton(
                   icon: Icons.remove,
                   type: CircleButtonType.secondary,
-                  disabled: minusDisabled,
-                  onPressed: onMinus,
+                  disabled: selectedSeat == 1,
+                  onPressed: decreaseSeat,
                 ),
+
                 Text(
                   "$selectedSeat",
                   style: TextStyle(
@@ -82,20 +87,23 @@ class _BlaSeatPickerState extends State<BlaSeatPicker> {
                     color: BlaColors.textNormal,
                   ),
                 ),
+
                 BlaCircleButton(
                   icon: Icons.add,
                   type: CircleButtonType.secondary,
-                   disabled: plusDisabled,
-                  onPressed: onPlus,
+                  disabled: selectedSeat == widget.maxSeat,
+                  onPressed: increaseSeat,
                 ),
               ],
             ),
 
-            Spacer(flex: 1),
+            Spacer(),
+
+            // Submit button
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                BlaCircleButton(icon: Icons.arrow_forward, onPressed: onSubmit),
+                BlaCircleButton(icon: Icons.arrow_forward, onPressed: submit),
               ],
             ),
           ],
